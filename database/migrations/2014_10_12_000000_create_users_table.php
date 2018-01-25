@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->bigInteger('accountable_id')->unsigned();
-            $table->string('');
+            $table->string('accountable_type');
             $table->rememberToken();
             $table->timestamps();
 

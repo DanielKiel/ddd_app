@@ -168,6 +168,8 @@ return [
          * Package Service Providers...
          */
 
+        \Core\CoreProvider::class,
+
         /*
          * Application Service Providers...
          */

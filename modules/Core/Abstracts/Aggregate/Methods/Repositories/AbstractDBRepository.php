@@ -16,9 +16,12 @@ use Illuminate\Database\Eloquent\Model;
  * Class DBRepository
  * @package Core\Abstracts\Aggregate\Methods\Repositories
  */
-abstract class DBRepository
+abstract class AbstractDBRepository
 {
-    private $rootEntity;
+    /** @var Model */
+    protected $rootEntity;
+
+    protected $struct;
 
     /**
      * DBRepository constructor.
@@ -51,9 +54,44 @@ abstract class DBRepository
     }
 
     /**
+     * @param array $struct
+     * @return $this
+     */
+    public function setStruct(array $struct)
+    {
+        $this->struct = $struct;
+
+        if (array_get($struct, 'id', false) !== false) {
+            $this->rootEntity = $this->rootEntity->find(array_get($struct, 'id'));
+        }
+
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     abstract function commit();
 
     abstract function findById($id);
+
+    /**
+     * @return array
+     */
+    protected function getAttributes(): array
+    {
+        $allowed = array_merge($this->rootEntity->getFillable(), array_keys($this->rootEntity->getAttributes()));
+
+        if (! is_array($allowed)) {
+            return [];
+        }
+
+        $prepared = [];
+
+        foreach ($allowed as $el) {
+            $prepared[$el] = array_get($this->struct, $el);
+        }
+
+        return $prepared;
+    }
 }
