@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Core\Student;
 
+use Core\Aggregates\SchoolClass\Structs\SchoolClass;
 use Core\Aggregates\Student\Events\StudentHadJoinedASchoolClass;
 use Core\Aggregates\Student\Events\StudentHadLeavedASchoolClass;
 use Core\Aggregates\Student\Events\StudentWasCreated;
@@ -97,7 +98,7 @@ class DBStatesTest extends TestCase
 
         $this->assertEquals(
             1,
-            \Core\Aggregates\Student\Structs\Entities\Student::find($student->id)->schoolClasses()->count()
+            \Core\Aggregates\Student\Structs\Entities\Student::find($student->id)->classes()->count()
         );
 
         $student->leavesASchoolClass($schoolClass);
@@ -108,8 +109,46 @@ class DBStatesTest extends TestCase
 
         $this->assertEquals(
             0,
-            \Core\Aggregates\Student\Structs\Entities\Student::find($student->id)->schoolClasses()->count()
+            \Core\Aggregates\Student\Structs\Entities\Student::find($student->id)->classes()->count()
         );
 
+    }
+
+    public function testSubjectAggregationAtJoinedSchoolClasses()
+    {
+        Event::fake();
+
+        $repo = $this->app->make('Core_Student_DBRepo');
+
+        $struct = [
+            'account' => [
+                'name' => 'me',
+                'password' => 'me',
+                'email' => 'mail@mailmeagain.develop'
+            ]
+        ];
+
+        /** @var Student $student */
+        $student = $repo->setStruct($struct)->commit();
+
+        /** @var SchoolClass $schoolClass */
+        $schoolClass =  $this->app->make('Core_SchoolClass_DBRepo')->setStruct(['name' => '5a'])->commit();
+
+        $subjectGerman = $this->app->make('Core_Subject_DBRepo')->setStruct(['name' => 'Deutsch'])->commit();
+        $subjectEnglish = $this->app->make('Core_Subject_DBRepo')->setStruct(['name' => 'Englisch'])->commit();
+        $this->app->make('Core_Subject_DBRepo')->setStruct(['name' => 'Mathe'])->commit();
+        $this->app->make('Core_Subject_DBRepo')->setStruct(['name' => 'Nons'])->commit();
+
+        $schoolClass->assignANewSubject($subjectGerman);
+        $schoolClass->assignANewSubject($subjectEnglish);
+
+        $student->joinsASchoolClass($schoolClass);
+
+        $this->assertEquals(2, count($student->subjects));
+
+        foreach ($student->subjects as $subject) {
+            $this->assertNotEquals('Mathe', $subject->name);
+            $this->assertNotEquals('Nons', $subject->name);
+        }
     }
 }

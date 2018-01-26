@@ -44,11 +44,7 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
 
         }, 5);
 
-        $this->rootEntity = $this->rootEntity->fresh(['account']);
-
-        $aggregate = new Student(
-            $this->rootEntity->toArray()
-        );
+        $aggregate = $this->aggregate();
 
         if ($isNew === true) {
             event(new StudentWasCreated($aggregate));
@@ -68,9 +64,7 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
     public function findById($id): Student
     {
         if ($this->rootEntity->id === $id) {
-            return new Student(
-                $this->rootEntity->toArray()
-            );
+            return $this->aggregate();
         }
 
         $this->rootEntity = $this->rootEntity->find($id);
@@ -78,6 +72,16 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
         if (! $this->rootEntity instanceof StudentEntity) {
             throw new NonValidEntityException('student entity not valid for id: ' . $id);
         }
+
+        return $this->aggregate();
+    }
+
+    /**
+     * @return Student
+     */
+    public function aggregate(): Student
+    {
+        $this->rootEntity = $this->rootEntity->fresh(['account', 'classes']);
 
         return new Student(
             $this->rootEntity->toArray()
@@ -115,14 +119,29 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
         if (!empty($classes)) {
             $insert = [];
             foreach ($classes as $key => $class) {
+                if (array_has($class, 'pivot')) {
+                    continue;
+                }
+
+                $exists = DB::table('school_class_student')
+                    ->where('school_class_id', array_get($class, 'id'))
+                    ->where('student_id', $this->rootEntity->id)
+                    ->exists();
+
+                if ((bool) $exists === true) {
+                    continue;
+                }
+
                 $insert[] = [
                     'school_class_id' => array_get($class, 'id'),
                     'student_id' => $this->rootEntity->id
                 ];
             }
 
-            DB::table('school_class_student')
-                ->insert($insert);
+            if (! empty($insert)) {
+                DB::table('school_class_student')
+                    ->insert($insert);
+            }
         }
 
         return $this;

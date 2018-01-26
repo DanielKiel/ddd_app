@@ -75,6 +75,8 @@ abstract class AbstractDBRepository
 
     abstract function findById($id);
 
+    abstract function aggregate();
+
     /**
      * @return array
      */

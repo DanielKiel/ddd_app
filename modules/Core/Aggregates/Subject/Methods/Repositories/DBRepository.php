@@ -37,11 +37,7 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
 
         }, 5);
 
-        $this->rootEntity = $this->rootEntity->fresh();
-
-        $aggregate = new Subject(
-            $this->rootEntity->toArray()
-        );
+        $aggregate = $this->aggregate();
 
         if ($isNew === true) {
             event(new SubjectWasCreated($aggregate));
@@ -61,9 +57,7 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
     public function findById($id): Subject
     {
         if ($this->rootEntity->id === $id) {
-            return new Subject(
-                $this->rootEntity->toArray()
-            );
+            return $this->aggregate();
         }
 
         $this->rootEntity = $this->rootEntity->find($id);
@@ -71,6 +65,16 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
         if (! $this->rootEntity instanceof SubjectEntity) {
             throw new NonValidEntityException('student entity not valid for id: ' . $id);
         }
+
+        return $this->aggregate();
+    }
+
+    /**
+     * @return Subject
+     */
+    public function aggregate()
+    {
+        $this->rootEntity = $this->rootEntity->fresh();
 
         return new Subject(
             $this->rootEntity->toArray()
