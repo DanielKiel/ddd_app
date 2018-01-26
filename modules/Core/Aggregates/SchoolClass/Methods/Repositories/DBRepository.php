@@ -32,6 +32,8 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
 
             $this->rootEntity->save();
 
+            $this->addSubjects();
+
         }, 5);
 
         $this->rootEntity = $this->rootEntity->fresh();
@@ -72,5 +74,29 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
         return new SchoolClass(
             $this->rootEntity->toArray()
         );
+    }
+
+    /**
+     * its not at this repository - but we must be aware that we only add subjects once
+     * @return $this
+     */
+    protected function addSubjects()
+    {
+        $subjects = array_get($this->struct, 'subjects', []);
+ 
+        if (!empty($subjects)) {
+            $insert = [];
+            foreach ($subjects as $key => $subject) {
+                $insert[] = [
+                    'subject_id' => array_get($subject, 'id'),
+                    'school_class_id' => $this->rootEntity->id
+                ];
+            }
+
+            DB::table('school_class_subject')
+                ->insert($insert);
+        }
+
+        return $this;
     }
 }

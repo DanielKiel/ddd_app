@@ -95,10 +95,21 @@ class DBStatesTest extends TestCase
 
         $this->assertEquals(1, count($student->classes));
 
+        $this->assertEquals(
+            1,
+            \Core\Aggregates\Student\Structs\Entities\Student::find($student->id)->schoolClasses()->count()
+        );
+
         $student->leavesASchoolClass($schoolClass);
 
         Event::assertDispatched(StudentHadLeavedASchoolClass::class, function ($e) use($schoolClass) {
             return $e->schoolClass->id === $schoolClass->id;
         });
+
+        $this->assertEquals(
+            0,
+            \Core\Aggregates\Student\Structs\Entities\Student::find($student->id)->schoolClasses()->count()
+        );
+
     }
 }
