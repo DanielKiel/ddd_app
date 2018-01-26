@@ -13,5 +13,4 @@ use Core\Abstracts\Aggregate\Structs\AbstractRootEntity;
 
 class Subject extends AbstractRootEntity
 {
-
 }

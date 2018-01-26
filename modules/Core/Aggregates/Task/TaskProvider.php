@@ -11,7 +11,9 @@ namespace Core\Aggregates\Task;
 
 use Core\Abstracts\Aggregate\AggregateProvider;
 use Core\Aggregates\Task\Methods\Commands\Homework\CreatingHomework;
+use Core\Aggregates\Task\Methods\Commands\Homework\FinishingHomework;
 use Core\Aggregates\Task\Methods\Repositories\TaskDBRepository;
+use Core\Aggregates\Task\Methods\Repositories\TaskStatusRepository;
 use Core\Aggregates\Task\Structs\Entities\Task;
 
 class TaskProvider extends AggregateProvider
@@ -25,6 +27,12 @@ class TaskProvider extends AggregateProvider
         $this->app->bind('Core_Task_Methods_CreatingHomework', function() {
             return new CreatingHomework();
         });
+
+        $this->app->bind('Core_Task_Methods_FinishingHomework', function() {
+            return new FinishingHomework();
+        });
+
+        $this->app->events->subscribe(new TaskStatusRepository());
     }
 
     public function register()

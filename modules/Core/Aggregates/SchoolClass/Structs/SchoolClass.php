@@ -15,6 +15,7 @@ use Core\Aggregates\Subject\Structs\Subject;
 
 class SchoolClass extends AbstractRootEntity
 {
+
     public function assignANewSubject(Subject $subject)
     {
         $subjectArray = $subject->toArray();
