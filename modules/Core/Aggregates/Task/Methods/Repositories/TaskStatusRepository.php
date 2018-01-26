@@ -15,7 +15,9 @@ use Core\Aggregates\Task\Structs\Task;
 
 class TaskStatusRepository
 {
-
+    /**
+     * @param AHomeworkWasFinishedByAStudent $event
+     */
     public function onHomeworkWasFinishedByAStudent(AHomeworkWasFinishedByAStudent $event)
     {
         if ($this->isACloseableTask($event->task) === true) {

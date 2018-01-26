@@ -17,16 +17,26 @@ abstract class AbstractRootEntity
     /** @var \Illuminate\Support\Collection  */
     protected $struct;
 
+    /**
+     * AbstractRootEntity constructor.
+     * @param array $struct
+     */
     public function __construct(array $struct)
     {
         $this->struct = collect($struct);
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         return $this->struct->toArray();
     }
 
+    /**
+     * @param $repoName
+     */
     public function refresh($repoName)
     {
         $repo = app()->make($repoName);
@@ -38,6 +48,10 @@ abstract class AbstractRootEntity
             ->toArray());
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function __get($name)
     {
         return $this->struct->get($name);
