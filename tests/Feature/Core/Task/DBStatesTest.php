@@ -11,8 +11,6 @@ use Core\Aggregates\Task\Methods\Commands\Homework\CreatingHomework;
 use Core\Aggregates\Task\Methods\Repositories\TaskDBRepository;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DBStatesTest extends TestCase
 {
