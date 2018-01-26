@@ -27,6 +27,17 @@ abstract class AbstractRootEntity
         return $this->struct->toArray();
     }
 
+    public function refresh($repoName)
+    {
+        $repo = app()->make($repoName);
+
+        $repo->setStruct($this->struct->toArray())
+            ->commit();
+
+        $this->struct = collect($repo->findById($this->id)
+            ->toArray());
+    }
+
     public function __get($name)
     {
         return $this->struct->get($name);

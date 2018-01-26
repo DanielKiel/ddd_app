@@ -15,7 +15,16 @@ class CreateHomeworksTable extends Migration
     {
         Schema::create('homeworks', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('task_id')->unsigned();
+            $table->dateTime('deadline');
+            $table->string('status')->default('open');
+            $table->string('todo');
+            $table->longText('content')->nullable();
+
             $table->timestamps();
+
+            $table->index('deadline');
+            $table->index('task_id');
         });
     }
 

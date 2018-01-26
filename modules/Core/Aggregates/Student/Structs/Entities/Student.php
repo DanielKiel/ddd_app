@@ -5,8 +5,10 @@ namespace Core\Aggregates\Student\Structs\Entities;
 use App\User;
 use Core\Aggregates\SchoolClass\Structs\Entities\SchoolClass;
 use Core\Aggregates\Subject\Structs\Entities\Subject;
+use Core\Aggregates\Task\Structs\Entities\Task;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Collection;
@@ -29,6 +31,14 @@ class Student extends Model
     public function classes(): BelongsToMany
     {
         return $this->belongsToMany(SchoolClass::class, 'school_class_student');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'student_id');
     }
 
     /**

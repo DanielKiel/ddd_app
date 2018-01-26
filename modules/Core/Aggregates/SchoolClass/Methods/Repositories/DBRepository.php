@@ -73,7 +73,7 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
      */
     public function aggregate()
     {
-        $this->rootEntity = $this->rootEntity->fresh();
+        $this->rootEntity = $this->rootEntity->fresh(['subjects']);
 
         return new SchoolClass(
             $this->rootEntity->toArray()

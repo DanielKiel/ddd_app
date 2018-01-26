@@ -33,9 +33,7 @@ class SchoolClass extends AbstractRootEntity
 
         $this->struct->put('subjects', $subjects);
 
-        app()->make('Core_SchoolClass_DBRepo')
-            ->setStruct($this->struct->toArray())
-            ->commit();
+        $this->refresh('Core_SchoolClass_DBRepo');
 
         event(new SchoolClassGotANewSubject(
             $this,

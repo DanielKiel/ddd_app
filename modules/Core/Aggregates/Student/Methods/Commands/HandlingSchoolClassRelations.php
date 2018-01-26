@@ -39,13 +39,7 @@ trait HandlingSchoolClassRelations
 
         // it will be necessary to refresh the struct -cause when joining a school class it means joining the assigned subjects of
         // a school class and we want to see them at the struct
-        $repo = app()->make('Core_Student_DBRepo');
-
-        $repo->setStruct($this->struct->toArray())
-            ->commit();
-
-        $this->struct = collect($repo->findById($this->id)
-            ->toArray());
+        $this->refresh('Core_Student_DBRepo');
 
         event(new StudentHadJoinedASchoolClass(
             $this,
