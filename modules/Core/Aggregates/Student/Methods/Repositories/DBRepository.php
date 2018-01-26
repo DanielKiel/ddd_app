@@ -105,6 +105,7 @@ class DBRepository extends AbstractDBRepository implements DBRepositoryInterface
     }
 
     /**
+     * its not at this repository - but we must be aware that we only add classes once
      * @return $this
      */
     protected function addClasses()

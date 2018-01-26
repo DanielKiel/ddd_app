@@ -10,8 +10,6 @@ use Core\Aggregates\Student\Methods\Repositories\DBRepository;
 use Core\Aggregates\Student\Structs\Student;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DBStatesTest extends TestCase
 {
