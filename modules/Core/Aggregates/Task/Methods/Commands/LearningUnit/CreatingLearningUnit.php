@@ -2,26 +2,26 @@
 /**
  * Created by PhpStorm.
  * User: dk
- * Date: 26.01.18
- * Time: 15:26
+ * Date: 27.01.18
+ * Time: 10:27
  */
 
-namespace Core\Aggregates\Task\Methods\Commands\Homework;
+namespace Core\Aggregates\Task\Methods\Commands\LearningUnit;
 
 
-use Core\Aggregates\Task\Events\Homework\AHomeworkSerieWasCreatedByStudent;
-use Core\Aggregates\Task\Events\Homework\ASingleHomeworkWasCreatedByStudent;
+use Core\Aggregates\Task\Events\LearningUnit\ALearningUnitWasFinishedByAStudent;
+use Core\Aggregates\Task\Events\LearningUnit\ASingleLearningUnitWasCreatedByAStudent;
 use Core\Aggregates\Task\Structs\Task;
 
-class CreatingHomework
+class CreatingLearningUnit
 {
     /**
      * @param $studentId
      * @param $subjectId
-     * @param array $homework
+     * @param array $learningUnit
      * @return Task
      */
-    public function createASingleHomeworkByStudent($studentId, $subjectId, array $homework): Task
+    public function createASingleLearningUnitByStudent($studentId, $subjectId, array $learningUnit): Task
     {
         $repo = app()->make('Core_Task_DBRepo');
 
@@ -29,12 +29,12 @@ class CreatingHomework
             'student_id' => $studentId,
             'subject_id' => $subjectId,
             'status' => 'open',
-            'homework' => [
-                $homework
+            'learningUnits' => [
+                $learningUnit
             ]
         ])->commit();
 
-        event(new ASingleHomeworkWasCreatedByStudent(
+        event(new ASingleLearningUnitWasCreatedByAStudent(
             $result,
             app()->make('Core_Student_DBRepo')->findById($studentId)
         ));
@@ -45,10 +45,10 @@ class CreatingHomework
     /**
      * @param $studentId
      * @param $subjectId
-     * @param array $homeworkSeries
+     * @param array $learningUnitSeries
      * @return Task
      */
-    public function createAHomeworkSeriesByStudent($studentId, $subjectId, array $homeworkSeries): Task
+    public function createALearningUnitSeriesByStudent($studentId, $subjectId, array $learningUnitSeries): Task
     {
         $repo = app()->make('Core_Task_DBRepo');
 
@@ -56,10 +56,10 @@ class CreatingHomework
             'student_id' => $studentId,
             'subject_id' => $subjectId,
             'status' => 'open',
-            'homework' => $homeworkSeries
+            'learningUnits' => $learningUnitSeries
         ])->commit();
 
-        event(new AHomeworkSerieWasCreatedByStudent(
+        event(new ALearningUnitWasFinishedByAStudent(
             $result,
             app()->make('Core_Student_DBRepo')->findById($studentId)
         ));

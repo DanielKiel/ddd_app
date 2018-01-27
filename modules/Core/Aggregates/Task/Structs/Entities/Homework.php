@@ -13,6 +13,10 @@ class Homework extends Model
         'deadline', 'todo', 'content', 'status', 'task_id'
     ];
 
+    protected $dates = [
+        'created_at', 'updated_at', 'deadline'
+    ];
+
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class, 'task_id');

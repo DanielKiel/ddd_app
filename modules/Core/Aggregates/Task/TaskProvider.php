@@ -13,6 +13,7 @@ use Core\Abstracts\Aggregate\AggregateProvider;
 use Core\Aggregates\Task\Methods\Commands\Homework\CreatingHomework;
 use Core\Aggregates\Task\Methods\Commands\Homework\FetchByCriticalDeadlines;
 use Core\Aggregates\Task\Methods\Commands\Homework\FinishingHomework;
+use Core\Aggregates\Task\Methods\Commands\LearningUnit\CreatingLearningUnit;
 use Core\Aggregates\Task\Methods\Repositories\TaskDBRepository;
 use Core\Aggregates\Task\Methods\Repositories\TaskStatusRepository;
 use Core\Aggregates\Task\Structs\Entities\Task;
@@ -35,6 +36,10 @@ class TaskProvider extends AggregateProvider
 
         $this->app->bind('Core_Task_Methods_FetchByCriticalDeadline', function() {
             return new FetchByCriticalDeadlines();
+        });
+
+        $this->app->bind('Core_Task_Methods_CreatingLearningUnit', function() {
+            return new CreatingLearningUnit();
         });
 
 

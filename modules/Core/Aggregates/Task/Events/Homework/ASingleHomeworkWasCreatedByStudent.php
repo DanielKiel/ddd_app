@@ -9,14 +9,19 @@
 namespace Core\Aggregates\Task\Events\Homework;
 
 
+use Core\Aggregates\Student\Structs\Student;
 use Core\Aggregates\Task\Structs\Task;
 
-class ASingleHomeworkWasCreated
+class ASingleHomeworkWasCreatedByStudent
 {
     public $task;
 
-    public function __construct(Task $task)
+    public $student;
+
+    public function __construct(Task $task, Student $student)
     {
         $this->task = $task;
+
+        $this->student = $student;
     }
 }

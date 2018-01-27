@@ -15,7 +15,16 @@ class CreateLearningUnitsTable extends Migration
     {
         Schema::create('learning_units', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('task_id')->unsigned();
+            $table->string('status')->default('open');
+            $table->dateTime('scheduled');
+            $table->integer('estimated_time')->default(30);
+            $table->string('todo');
+            $table->longText('content')->nullable();
             $table->timestamps();
+
+            $table->index('task_id');
+            $table->index('scheduled');
         });
     }
 
