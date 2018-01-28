@@ -15,6 +15,7 @@ use Core\Aggregates\Task\Contracts\Repositories\TaskDBRepositoryInterface;
 use Core\Aggregates\Task\Events\TaskWasCreated;
 use Core\Aggregates\Task\Events\TaskWasUpdated;
 use Core\Aggregates\Task\Structs\Entities\Homework;
+use Core\Aggregates\Task\Structs\Entities\LearningUnit;
 use Core\Aggregates\Task\Structs\Task;
 use Core\Aggregates\Task\Structs\Entities\Task as TaskEntity;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +37,8 @@ class TaskDBRepository extends AbstractDBRepository implements TaskDBRepositoryI
 
             $this->rootEntity->save();
 
-            $this->addHomework();
+            $this->addHomework()
+                ->addLearningUnits();
 
         }, 5);
 
@@ -77,7 +79,7 @@ class TaskDBRepository extends AbstractDBRepository implements TaskDBRepositoryI
      */
     public function aggregate():Task
     {
-        $this->rootEntity = $this->rootEntity->fresh(['homework']);
+        $this->rootEntity = $this->rootEntity->fresh(['homework', 'learningUnits']);
 
         return new Task(
             $this->rootEntity->toArray()
@@ -100,6 +102,28 @@ class TaskDBRepository extends AbstractDBRepository implements TaskDBRepositoryI
                 array_set($work, 'task_id', $this->rootEntity->id);
 
                 Homework::create($work);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function addLearningUnits()
+    {
+        $learningUnits = array_get($this->struct, 'learning_units', []);
+
+        if (!empty($learningUnits)) {
+            foreach ($learningUnits as $key => $work) {
+                if (array_has($work, 'id')) {
+                    continue;
+                }
+
+                array_set($work, 'task_id', $this->rootEntity->id);
+
+                LearningUnit::create($work);
             }
         }
 

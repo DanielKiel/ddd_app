@@ -9,7 +9,7 @@
 namespace Core\Aggregates\Task\Methods\Commands\LearningUnit;
 
 
-use Core\Aggregates\Task\Events\LearningUnit\ALearningUnitWasFinishedByAStudent;
+use Core\Aggregates\Task\Events\LearningUnit\ALearningUnitSerieWasCreatedByAStudent;
 use Core\Aggregates\Task\Events\LearningUnit\ASingleLearningUnitWasCreatedByAStudent;
 use Core\Aggregates\Task\Structs\Task;
 
@@ -29,7 +29,7 @@ class CreatingLearningUnit
             'student_id' => $studentId,
             'subject_id' => $subjectId,
             'status' => 'open',
-            'learningUnits' => [
+            'learning_units' => [
                 $learningUnit
             ]
         ])->commit();
@@ -56,10 +56,10 @@ class CreatingLearningUnit
             'student_id' => $studentId,
             'subject_id' => $subjectId,
             'status' => 'open',
-            'learningUnits' => $learningUnitSeries
+            'learning_units' => $learningUnitSeries
         ])->commit();
 
-        event(new ALearningUnitWasFinishedByAStudent(
+        event(new ALearningUnitSerieWasCreatedByAStudent(
             $result,
             app()->make('Core_Student_DBRepo')->findById($studentId)
         ));

@@ -10,15 +10,16 @@ namespace Core\Aggregates\Task\Methods\Repositories;
 
 
 use Core\Aggregates\Task\Events\Homework\AHomeworkWasFinishedByAStudent;
+use Core\Aggregates\Task\Events\LearningUnit\ALearningUnitWasFinishedByAStudent;
 use Core\Aggregates\Task\Events\TaskWasClosedByAStudent;
 use Core\Aggregates\Task\Structs\Task;
 
 class TaskStatusRepository
 {
     /**
-     * @param AHomeworkWasFinishedByAStudent $event
+     * @param $event
      */
-    public function onHomeworkWasFinishedByAStudent(AHomeworkWasFinishedByAStudent $event)
+    public function checkIfTaskIsCloseable($event)
     {
         if ($this->isACloseableTask($event->task) === true) {
             $event->task->close();
@@ -37,7 +38,12 @@ class TaskStatusRepository
     {
         $events->listen(
            AHomeworkWasFinishedByAStudent::class,
-           get_class($this) . '@onHomeworkWasFinishedByAStudent'
+           get_class($this) . '@checkIfTaskIsCloseable'
+        );
+
+        $events->listen(
+            ALearningUnitWasFinishedByAStudent::class,
+            get_class($this) . '@checkIfTaskIsCloseable'
         );
     }
 
@@ -49,20 +55,28 @@ class TaskStatusRepository
     {
         $isCloseable = true;
 
-        $homework = $task->homework;
+        $properties = ['homework', 'learning_units'];
 
-        if (! is_array($homework)) {
-            $homework = [];
-        }
+        foreach($properties as $property) {
+            $subjects = $task->{$property};
 
-        foreach ($homework as $el) {
-            if (array_get($el, 'status') !== 'closed') {
-                $isCloseable = false;
+            if (! is_array($subjects)) {
+                $subjects = [];
+            }
 
-                break;
+            foreach ($subjects as $subject) {
+                if (array_get($subject, 'status') !== 'closed') {
+                    $isCloseable = false;
+
+                    break;
+                }
+            }
+
+            if ($isCloseable === false) {
+                return $isCloseable;
             }
         }
-        
+
         return $isCloseable;
     }
 

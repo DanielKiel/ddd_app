@@ -37,4 +37,9 @@ class Task extends Model
     {
         return $this->hasMany(Homework::class, 'task_id');
     }
+
+    public function learningUnits(): HasMany
+    {
+        return $this->hasMany(LearningUnit::class, 'task_id');
+    }
 }

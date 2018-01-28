@@ -2,15 +2,9 @@
 
 namespace Tests\Feature\Core\Task;
 
-use Carbon\Carbon;
-use Core\Aggregates\Task\Events\Homework\AHomeworkSerieWasCreatedByStudent;
-use Core\Aggregates\Task\Events\Homework\ASingleHomeworkWasCreatedByStudent;
 use Core\Aggregates\Task\Events\TaskWasCreated;
 use Core\Aggregates\Task\Events\TaskWasUpdated;
-use Core\Aggregates\Task\Methods\Commands\Homework\CreatingHomework;
-use Core\Aggregates\Task\Methods\Commands\Homework\FinishingHomework;
 use Core\Aggregates\Task\Methods\Repositories\TaskDBRepository;
-use Core\Aggregates\Task\Structs\Entities\Task;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
