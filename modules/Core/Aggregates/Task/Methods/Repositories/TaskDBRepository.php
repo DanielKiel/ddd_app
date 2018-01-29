@@ -14,6 +14,7 @@ use Core\Abstracts\Aggregate\Methods\Repositories\AbstractDBRepository;
 use Core\Aggregates\Task\Contracts\Repositories\TaskDBRepositoryInterface;
 use Core\Aggregates\Task\Events\TaskWasCreated;
 use Core\Aggregates\Task\Events\TaskWasUpdated;
+use Core\Aggregates\Task\Structs\Entities\Exam;
 use Core\Aggregates\Task\Structs\Entities\Homework;
 use Core\Aggregates\Task\Structs\Entities\LearningUnit;
 use Core\Aggregates\Task\Structs\Task;
@@ -79,7 +80,7 @@ class TaskDBRepository extends AbstractDBRepository implements TaskDBRepositoryI
      */
     public function aggregate():Task
     {
-        $this->rootEntity = $this->rootEntity->fresh(['homework', 'learningUnits']);
+        $this->rootEntity = $this->rootEntity->fresh(['homework', 'learningUnits', 'exams']);
 
         return new Task(
             $this->rootEntity->toArray()
@@ -124,6 +125,28 @@ class TaskDBRepository extends AbstractDBRepository implements TaskDBRepositoryI
                 array_set($work, 'task_id', $this->rootEntity->id);
 
                 LearningUnit::create($work);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function addExams()
+    {
+        $exams = array_get($this->struct, 'exams', []);
+
+        if (!empty($exams)) {
+            foreach ($exams as $key => $exam) {
+                if (array_has($exam, 'id')) { 
+                    continue;
+                }
+
+                array_set($exam, 'task_id', $this->rootEntity->id);
+
+                Exam::create($exam);
             }
         }
 

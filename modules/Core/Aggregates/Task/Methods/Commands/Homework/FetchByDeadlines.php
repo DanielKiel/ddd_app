@@ -14,7 +14,7 @@ use Core\Aggregates\Task\Structs\Entities\Homework;
 use Illuminate\Support\Collection;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-class FetchByCriticalDeadlines
+class FetchByDeadlines
 {
     /**
      * write something like addDays(2) to get all tasks which have homework where the deadline is before now + 2 days

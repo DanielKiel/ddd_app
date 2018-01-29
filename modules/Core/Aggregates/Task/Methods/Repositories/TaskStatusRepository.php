@@ -55,7 +55,7 @@ class TaskStatusRepository
     {
         $isCloseable = true;
 
-        $properties = ['homework', 'learning_units'];
+        $properties = ['homework', 'learning_units', 'exams'];
 
         foreach($properties as $property) {
             $subjects = $task->{$property};

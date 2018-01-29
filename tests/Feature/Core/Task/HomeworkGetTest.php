@@ -3,7 +3,7 @@
 namespace Tests\Feature\Core\Task;
 
 use Carbon\Carbon;
-use Core\Aggregates\Task\Methods\Commands\Homework\FetchByCriticalDeadlines;
+use Core\Aggregates\Task\Methods\Commands\Homework\FetchByDeadlines;
 use Tests\TestCase;
 
 class HomeworkGetTest extends TestCase
@@ -66,8 +66,8 @@ class HomeworkGetTest extends TestCase
             ]
         ]);
 
-        /** @var FetchByCriticalDeadlines $method */
-        $method = app()->make('Core_Task_Methods_FetchByCriticalDeadline');
+        /** @var FetchByDeadlines $method */
+        $method = app()->make('Core_Task_Methods_FetchByDeadline');
 
         $result = $method->fetchByTimeExpression('addDay(-2)');
 
@@ -132,8 +132,8 @@ class HomeworkGetTest extends TestCase
             ]
         ]);
 
-        /** @var FetchByCriticalDeadlines $method */
-        $method = app()->make('Core_Task_Methods_FetchByCriticalDeadline');
+        /** @var FetchByDeadlines $method */
+        $method = app()->make('Core_Task_Methods_FetchByDeadline');
 
         $result = $method->fetchByTimeRange(Carbon::now(), Carbon::now()->addDay(5));
 

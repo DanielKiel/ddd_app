@@ -15,6 +15,11 @@ use Core\Aggregates\Task\Structs\Entities\LearningUnit;
 
 class FinishingLearningUnit
 {
+    /**
+     * @param $learningUnitId
+     * @param Student $student
+     * @return mixed
+     */
     public function finishingLearningUnitByAStudent($learningUnitId, Student $student)
     {
         $learningUnit = LearningUnit::find($learningUnitId);

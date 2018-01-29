@@ -11,10 +11,12 @@ namespace Core\Aggregates\Task;
 
 use Core\Abstracts\Aggregate\AggregateProvider;
 use Core\Aggregates\Task\Methods\Commands\Homework\CreatingHomework;
-use Core\Aggregates\Task\Methods\Commands\Homework\FetchByCriticalDeadlines;
+use Core\Aggregates\Task\Methods\Commands\Homework\FetchByDeadlines;
 use Core\Aggregates\Task\Methods\Commands\Homework\FinishingHomework;
 use Core\Aggregates\Task\Methods\Commands\LearningUnit\CreatingLearningUnit;
 use Core\Aggregates\Task\Methods\Commands\LearningUnit\FinishingLearningUnit;
+use Core\Aggregates\Task\Methods\Exam\CreatingExam;
+use Core\Aggregates\Task\Methods\Exam\FinishingExam;
 use Core\Aggregates\Task\Methods\Repositories\TaskDBRepository;
 use Core\Aggregates\Task\Methods\Repositories\TaskStatusRepository;
 use Core\Aggregates\Task\Structs\Entities\Task;
@@ -35,8 +37,8 @@ class TaskProvider extends AggregateProvider
             return new FinishingHomework();
         });
 
-        $this->app->bind('Core_Task_Methods_FetchByCriticalDeadline', function() {
-            return new FetchByCriticalDeadlines();
+        $this->app->bind('Core_Task_Methods_FetchByDeadline', function() {
+            return new FetchByDeadlines();
         });
 
         $this->app->bind('Core_Task_Methods_CreatingLearningUnit', function() {
@@ -45,6 +47,14 @@ class TaskProvider extends AggregateProvider
 
         $this->app->bind('Core_Task_Methods_FinishingLearningUnit', function() {
             return new FinishingLearningUnit();
+        });
+
+        $this->app->bind('Core_Task_Methods_CreatingExam', function() {
+            return new CreatingExam();
+        });
+
+        $this->app->bind('Core_Task_Methods_FinishingExam', function() {
+            return new FinishingExam();
         });
 
 

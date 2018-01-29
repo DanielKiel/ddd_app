@@ -33,13 +33,27 @@ class Task extends Model
         return $this->belongsTo(Subject::class, 'subject_id');
     }
 
+    /**
+     * @return HasMany
+     */
     public function homework(): HasMany
     {
         return $this->hasMany(Homework::class, 'task_id');
     }
 
+    /**
+     * @return HasMany
+     */
     public function learningUnits(): HasMany
     {
         return $this->hasMany(LearningUnit::class, 'task_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function exams(): HasMany
+    {
+        return $this->hasMany(Exam::class, 'task_id');
     }
 }
