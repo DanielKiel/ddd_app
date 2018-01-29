@@ -9,6 +9,7 @@
 namespace Core\Aggregates\Task\Methods\Repositories;
 
 
+use Core\Aggregates\Task\Events\Exam\AnExamWasFinishedByStudent;
 use Core\Aggregates\Task\Events\Homework\AHomeworkWasFinishedByAStudent;
 use Core\Aggregates\Task\Events\LearningUnit\ALearningUnitWasFinishedByAStudent;
 use Core\Aggregates\Task\Events\TaskWasClosedByAStudent;
@@ -43,6 +44,11 @@ class TaskStatusRepository
 
         $events->listen(
             ALearningUnitWasFinishedByAStudent::class,
+            get_class($this) . '@checkIfTaskIsCloseable'
+        );
+
+        $events->listen(
+            AnExamWasFinishedByStudent::class,
             get_class($this) . '@checkIfTaskIsCloseable'
         );
     }

@@ -6,7 +6,7 @@
  * Time: 15:47
  */
 
-namespace Core\Aggregates\Task\Methods\Exam;
+namespace Core\Aggregates\Task\Methods\Commands\Exam;
 
 
 use Core\Aggregates\Task\Events\Exam\AnExamSeriesWasCreatedByStudent;

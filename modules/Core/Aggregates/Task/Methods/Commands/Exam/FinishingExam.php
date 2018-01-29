@@ -6,7 +6,7 @@
  * Time: 15:47
  */
 
-namespace Core\Aggregates\Task\Methods\Exam;
+namespace Core\Aggregates\Task\Methods\Commands\Exam;
 
 
 use Core\Aggregates\Student\Structs\Student;
@@ -22,13 +22,13 @@ class FinishingExam
      */
     public function finishingExamByAStudent($examId, Student $student)
     {
-        $learningUnit = Exam::find($examId);
-        $learningUnit->update([
+        $exam = Exam::find($examId);
+        $exam->update([
             'status' => 'closed'
         ]);
 
         $repo = app()->make('Core_Task_DBRepo');
-        $task = $repo->findById($learningUnit->task_id);
+        $task = $repo->findById($exam->task_id);
 
         event(new AnExamWasFinishedByStudent($task, $student));
 

@@ -21,6 +21,14 @@ class Relationships extends Migration
         Schema::table('homeworks', function(Blueprint $table) {
             $table->foreign('task_id')->references('id')->on('tasks');
         });
+
+        Schema::table('learning_units', function(Blueprint $table) {
+            $table->foreign('task_id')->references('id')->on('tasks');
+        });
+
+        Schema::table('exams', function(Blueprint $table) {
+            $table->foreign('task_id')->references('id')->on('tasks');
+        });
     }
 
     /**
@@ -37,6 +45,14 @@ class Relationships extends Migration
 
         Schema::table('homeworks', function(Blueprint $table){
             $table->dropForeign('homeworks_task_id_foreign');
+        });
+
+        Schema::table('learning_units', function(Blueprint $table){
+            $table->dropForeign('learning_units_task_id_foreign');
+        });
+
+        Schema::table('exams', function(Blueprint $table){
+            $table->dropForeign('exams_task_id_foreign');
         });
     }
 }

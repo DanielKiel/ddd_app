@@ -39,7 +39,8 @@ class TaskDBRepository extends AbstractDBRepository implements TaskDBRepositoryI
             $this->rootEntity->save();
 
             $this->addHomework()
-                ->addLearningUnits();
+                ->addLearningUnits()
+                ->addExams();
 
         }, 5);
 
