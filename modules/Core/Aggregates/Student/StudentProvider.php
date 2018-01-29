@@ -10,6 +10,7 @@ namespace Core\Aggregates\Student;
 
 
 use Core\Abstracts\Aggregate\AggregateProvider;
+use Core\Aggregates\Student\Methods\Commands\HandlingSchoolClassRelations;
 use Core\Aggregates\Student\Methods\Repositories\DBRepository;
 use Core\Aggregates\Student\Structs\Entities\Student;
 

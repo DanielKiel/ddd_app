@@ -83,6 +83,8 @@ class DBStatesTest extends TestCase
 
         $schoolClass =  $this->app->make('Core_SchoolClass_DBRepo')->setStruct(['name' => '5a'])->commit();
 
+
+
         $student->joinsASchoolClass($schoolClass);
 
         Event::assertDispatched(StudentHadJoinedASchoolClass::class, function ($e) use($schoolClass) {
